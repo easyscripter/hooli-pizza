@@ -1,0 +1,26 @@
+.pagination {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  margin: 1rem 0;
+}
+
+.page {
+  color: #fe5f1e;
+  height: 3rem;
+  width: 3rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  border: solid 0.2rem #fe5f1e;
+  background-color: transparent;
+  border-radius: 6rem;
+  cursor: pointer;
+}
+
+.active {
+  background-color: #fe5f1e;
+  color: white;
+}
