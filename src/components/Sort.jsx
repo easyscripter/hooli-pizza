@@ -1,10 +1,14 @@
 import React from "react";
-const Sort = ({ sortList, sortItem, onClickSortType }) => {
+import {useDispatch, useSelector} from "react-redux";
+import {setSortItem} from "../redux/slices/filterSlice";
+const Sort = ({ sortList}) => {
+    const dispatch = useDispatch();
+    const {sortType, value, order} = useSelector(state => state.filter.sortItem);
     const [isShow, setIsShow] = React.useState(false);
 
 
     const handleSortValueClick = (item) => {
-        onClickSortType(item);
+        dispatch(setSortItem(item));
         setIsShow(false);
     }
 
@@ -23,7 +27,7 @@ const Sort = ({ sortList, sortItem, onClickSortType }) => {
                     />
                 </svg>
                 <b>Сортировка по:</b>
-                <span onClick={() => setIsShow(!isShow)}>{sortItem.value}</span>
+                <span onClick={() => setIsShow(!isShow)}>{value}</span>
             </div>
             {isShow && (
                 <div className="sort__popup">
@@ -32,8 +36,8 @@ const Sort = ({ sortList, sortItem, onClickSortType }) => {
                             <li
                             key={index}
                             onClick={() => handleSortValueClick(item)}
-                            className={sortItem.sortType === item.sortType &&
-                            sortItem.order === item.order ? 'active' : ''}>
+                            className={sortType === item.sortType &&
+                            order === item.order ? 'active' : ''}>
                             {item.value}
                             </li>
                         ))}
