@@ -5,6 +5,22 @@ const Sort = ({ sortList}) => {
     const dispatch = useDispatch();
     const {sortType, value, order} = useSelector(state => state.filter.sortItem);
     const [isShow, setIsShow] = React.useState(false);
+    const sortRef = React.useRef();
+
+    const handleClickOutside = (event) => {
+        if (!event.path.includes(sortRef.current)) {
+            setIsShow(false);
+            console.log('click outside');
+        }
+    };
+
+    React.useEffect(() => {
+        document.addEventListener('click', handleClickOutside);
+
+        return () => {
+            document.removeEventListener('click', handleClickOutside);
+        }
+    }, [])
 
 
     const handleSortValueClick = (item) => {
@@ -13,7 +29,7 @@ const Sort = ({ sortList}) => {
     }
 
     return (
-        <div className="sort">
+        <div ref={sortRef} className="sort">
             <div className="sort__label">
                 <svg
                     width="10"

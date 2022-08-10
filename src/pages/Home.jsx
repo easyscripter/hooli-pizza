@@ -39,25 +39,29 @@ const Home = () => {
         count: pizzas.length,
     });
 
+    const categorySearch = categoryId > 0 ? `category=${categoryId}` : ``;
+
+    const fetchPizzas = () => {
+        axios.get(`https://62e9731f3a5f1572e86aedb9.mockapi.io/pizzas?${categorySearch}`, {
+            params: {
+                search: searchValue,
+                sortBy: sortType,
+                order: order,
+            }
+        }).then(response => {
+            setPizzas(response.data);
+            setIsLoading(false);
+        });
+    }
+
+    React.useEffect(() => {
+        setIsLoading(true);
+        fetchPizzas();
+    }, [categoryId, sortType, order]);
+
     const onChangeCategory = (id) => {
         dispatch(setCategoryId(id));
     };
-
-    const categorySearch = categoryId > 0 ? `category=${categoryId}` : ``;
-
-    React.useEffect(() => {
-      setIsLoading(true);
-      axios.get(`https://62e9731f3a5f1572e86aedb9.mockapi.io/pizzas?${categorySearch}`, {
-        params: {
-            search: searchValue,
-            sortBy: sortType,
-            order: order,
-        }
-      }).then(response => {
-          setPizzas(response.data);
-          setIsLoading(false);
-      });
-    }, [categoryId, sortType, order, categorySearch, searchValue]);
 
     return (
         <>
@@ -74,6 +78,7 @@ const Home = () => {
             : pizzas.slice(firstContentIndex, lastContentIndex).map((pizza) => (
               <PizzaBlock
                 key={pizza.id}
+                id={pizza.id}
                 title={pizza.title}
                 price={pizza.price}
                 imageSource={pizza.imageUrl}

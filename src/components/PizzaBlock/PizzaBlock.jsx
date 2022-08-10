@@ -1,10 +1,30 @@
 import React from 'react';
-const PizzaBlock = ({title, price, imageSource, sizes, types}) => {
-    const typeNames = ['тонкое', 'традиционное'];
+import {useDispatch, useSelector} from "react-redux";
+import {addProduct} from "../../redux/slices/cartSlice";
 
+const typeNames = ['тонкое', 'традиционное'];
+
+const PizzaBlock = ({id, title, price, imageSource, sizes, types}) => {
     const [activeSizeIndex, setActiveSizeIndex] = React.useState(0);
     const [activeTypeIndex, setActiveTypeIndex] = React.useState(0);
-    const [pizzaCounter, setPizzaCounter] = React.useState(0);
+
+    const cartItem = useSelector(state => state.cart.items.find(item => item.id === id));
+
+    const pizzaCounter = cartItem ? cartItem.count : 0;
+
+    const dispatch = useDispatch();
+
+    const addToCart = (id, title, price, imageUrl, type, size) => {
+        const item = {
+            id,
+            title,
+            price,
+            imageUrl,
+            type,
+            size,
+        }
+        dispatch(addProduct(item));
+    }
 
     return (
         <div className="pizza-block">
@@ -13,16 +33,16 @@ const PizzaBlock = ({title, price, imageSource, sizes, types}) => {
             <div className="pizza-block__selector">
                 <ul>
                    {types.map((typeId) => (
-                        <li 
+                        <li
                         key={typeId}
                         onClick={() => setActiveTypeIndex(typeId)}
                         className={activeTypeIndex === typeId ? 'active' : ''}>{typeNames[typeId]}</li>
-                   ))} 
+                   ))}
                 </ul>
                 <ul>
                     {sizes.map((size, index) => (
-                        <li onClick={() => setActiveSizeIndex(index)} 
-                        key={index} 
+                        <li onClick={() => setActiveSizeIndex(index)}
+                        key={index}
                         className={activeSizeIndex === index ? 'active' : ''}>{size} см</li>
                     ))}
                 </ul>
@@ -31,7 +51,9 @@ const PizzaBlock = ({title, price, imageSource, sizes, types}) => {
                 <div className="pizza-block__price">
                     от {price} Р
                 </div>
-                <button onClick={() => setPizzaCounter(pizzaCounter + 1)} className="button button--outline button--add">
+                <button
+                    onClick={() => addToCart(id, title, price, imageSource, typeNames[activeTypeIndex], sizes[activeSizeIndex])}
+                    className="button button--outline button--add">
                     <svg
                         width="12"
                         height="12"
@@ -44,7 +66,7 @@ const PizzaBlock = ({title, price, imageSource, sizes, types}) => {
                         />
                     </svg>
                     <span>Добавить</span>
-                    <i>{pizzaCounter}</i>
+                    {pizzaCounter > 0 &&  <i>{pizzaCounter}</i>}
                 </button>
             </div>
         </div>
