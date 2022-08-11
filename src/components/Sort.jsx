@@ -10,7 +10,6 @@ const Sort = ({ sortList}) => {
     const handleClickOutside = (event) => {
         if (!event.path.includes(sortRef.current)) {
             setIsShow(false);
-            console.log('click outside');
         }
     };
 
