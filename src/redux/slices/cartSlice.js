@@ -24,13 +24,21 @@ const cartSlice = createSlice({
             },0);
         },
         removeProduct(state, action) {
-            state.items.filter(item => item.id !== action.payload)
+            state.items = state.items.filter(item => item.id !== action.payload);
+        },
+
+        reduceCountOfProduct(state, action) {
+            const targetItem = state.items.find(item => item.id === action.payload);
+            if (targetItem) {
+                targetItem.count--;
+            }
         },
         clearProducts(state) {
           state.items = [];
+          state.totalPrice = 0;
         },
     }
 });
 
-export const {addProduct, removeProduct, clearProducts} = cartSlice.actions;
+export const {addProduct, removeProduct, reduceCountOfProduct, clearProducts} = cartSlice.actions;
 export default cartSlice.reducer;
