@@ -1,11 +1,12 @@
 import React from 'react';
-import {Link, useParams} from "react-router-dom";
+import {Link, useParams, useHistory} from "react-router-dom";
 import axios from "axios";
 
 const FullPizza = () => {
 
     const {id} = useParams();
     const [pizza, setPizza] = React.useState();
+    const history = useHistory();
 
     React.useEffect(() => {
         async function fetchPizza() {
@@ -18,6 +19,8 @@ const FullPizza = () => {
                 setPizza(data[0]);
             } catch (e) {
                 console.log('error:', e);
+                alert('Пицца не найдена');
+                history.goBack();
             }
         }
         fetchPizza();
