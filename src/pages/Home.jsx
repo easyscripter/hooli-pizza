@@ -7,14 +7,16 @@ import Categories from '../components/Categories';
 import {Pagination} from "../components/Pagination/Pagination";
 import usePagination from "../utils/usePagination";
 import {useDispatch, useSelector} from "react-redux";
-import {setCategoryId} from "../redux/slices/filterSlice";
-import {fetchPizzas} from "../redux/slices/pizzasSlice";
+import {selectCategoryId, selectSortItem, setCategoryId} from "../redux/slices/filterSlice";
+import {fetchPizzas, selectPizzas} from "../redux/slices/pizzasSlice";
+import {selectSearchValue} from "../redux/slices/searchSlice";
+import {Link} from "react-router-dom";
 
 const Home = () => {
-    const {sortType, order} = useSelector(state => state.filter.sortItem);
-    const {pizzas, status} = useSelector(state => state.pizzas);
-    const searchValue = useSelector(state => state.search.searchValue);
-    const categoryId = useSelector(state => state.filter.categoryId);
+    const {sortType, order} = useSelector(selectSortItem);
+    const {pizzas, status} = useSelector(selectPizzas);
+    const searchValue = useSelector(selectSearchValue);
+    const categoryId = useSelector(selectCategoryId);
     const sortList = [
         {value: 'популярности ( возрастанию )', sortType: 'rating', order: 'asc'},
         {value: 'популярности ( убыванию )', sortType: 'rating', order: 'desc'},
@@ -74,15 +76,17 @@ const Home = () => {
                     {
                         status === 'loading' ? [...new Array(6)].map((_, index) => <PizzaBlockSkeleton key={index}/>)
                             : pizzas.slice(firstContentIndex, lastContentIndex).map((pizza) => (
-                                <PizzaBlock
-                                    key={pizza.id}
-                                    id={pizza.id}
-                                    title={pizza.title}
-                                    price={pizza.price}
-                                    imageSource={pizza.imageUrl}
-                                    sizes={pizza.sizes}
-                                    types={pizza.types}
-                                />
+                                <Link to={`/pizza/${pizza.id}`}>
+                                    <PizzaBlock
+                                        key={pizza.id}
+                                        id={pizza.id}
+                                        title={pizza.title}
+                                        price={pizza.price}
+                                        imageSource={pizza.imageUrl}
+                                        sizes={pizza.sizes}
+                                        types={pizza.types}
+                                    />
+                                </Link>
                             ))
                     };
                 </div>

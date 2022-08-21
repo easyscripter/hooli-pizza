@@ -1,9 +1,11 @@
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import {Search} from "./Search";
 import {useSelector} from "react-redux";
+import {selectCart} from "../redux/slices/cartSlice";
 
 const Header = () => {
-    const {items, totalPrice} = useSelector(state => state.cart);
+    const {pathname} = useLocation();
+    const {items, totalPrice} = useSelector(selectCart);
     return (
         <div className="header">
             <div className="container">
@@ -16,8 +18,8 @@ const Header = () => {
                     </div>
                 </Link>
                 <Search/>
-                <div className="header__cart">
-                    <Link to="/cart" className="button button--cart">
+                 <div className="header__cart">
+                     {pathname !== '/cart' && <Link to="/cart" className="button button--cart">
                         <span>{totalPrice} ₽</span>
                         <div className="button__delimiter"></div>
                         <svg
@@ -49,7 +51,7 @@ const Header = () => {
                             />
                         </svg>
                         <span>{items.length}</span>
-                    </Link>
+                    </Link>}
                 </div>
             </div>
         </div>
